@@ -16,12 +16,11 @@ WORKDIR /tmp
 RUN curl -fSL "https://ftp.insert.com.pl/pub/aktualizacje/InsERT_nexo/nexoSDK_${NEXO_VERSION}.exe" -o sdk.exe
 
 # Rozpakowanie przy użyciu p7zip. 7z potrafi rozpakować wiele self-extracting .exe
-RUN mkdir -p /sdk \
-    && 7z x sdk.exe -o/sd k -y || true
+RUN 7z x sdk.exe -y
 
 # Jeśli p7zip wypakował katalog, znajdź pierwszy katalog i nazwij go 'nexoSDK'
-RUN first=$(find /sdk -mindepth 1 -maxdepth 1 -type d | head -n1) \
-    && if [ -n "$first" ]; then mv "$first" /sdk/nexoSDK || true; fi || true
+RUN first=$(find /tmp -mindepth 1 -maxdepth 1 -type d | head -n1) \
+    && if [ -n "$first" ]; then mv "$first" /tmp/nexoSDK || true; fi || true
 
 # Usuń pobrany plik instalacyjny
 RUN rm -f sdk.exe || true
@@ -30,7 +29,7 @@ RUN rm -f sdk.exe || true
 FROM mcr.microsoft.com/dotnet/sdk:8.0
 
 # Skopiuj zawartość katalogu Bin z rozpakowanego SDK do obrazu finalnego
-COPY --from=builder /sdk/nexoSDK/Bin /InsertNexoSDK
+COPY --from=builder /tmp/nexoSDK/Bin /InsertNexoSDK
 
 # Ustaw prawa do odczytu/wykonywania potrzebne w Linuksie
 RUN chmod -R a+rX /InsertNexoSDK || true

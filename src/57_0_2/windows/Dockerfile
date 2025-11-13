@@ -21,7 +21,7 @@ RUN $firstFolder = Get-ChildItem -Path C:\sdk | Where-Object { $_.PSIsContainer 
 
 
 # Tworzenie finalnego obrazu
-FROM mcr.microsoft.com/dotnet/sdk:8.0
+FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-ltsc2022
 
 # Kopiowanie nexoSDK do finalnego obrazu
 COPY --from=builder C:\\sdk\\nexoSDK\\Bin C:\\InsertNexoSDK
