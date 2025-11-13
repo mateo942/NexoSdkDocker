@@ -12,8 +12,6 @@ RUN apt-get update \
 
 WORKDIR /tmp
 
-RUN echo "https://ftp.insert.com.pl/pub/aktualizacje/InsERT_nexo/nexoSDK_${NEXO_VERSION}.exe" > text1.txt
-
 # Pobranie InsERT nexoSDK (plik .exe self-extracting) i zapis jako sdk.exe
 RUN curl -fSL "https://ftp.insert.com.pl/pub/aktualizacje/InsERT_nexo/nexoSDK_${NEXO_VERSION}.exe" -o sdk.exe
 
