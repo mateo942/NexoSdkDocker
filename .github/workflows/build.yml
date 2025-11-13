@@ -34,7 +34,7 @@ jobs:
   
 
   build_and_push-linux:
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     if: ${{ inputs.tag }} 
     permissions:
       packages: write
