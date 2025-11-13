@@ -5,29 +5,54 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version (np. 50_0_2)'
+        required: true
+        type: string
 
 jobs:
-  build_and_push:
+  build_and_push-windows:
     runs-on: windows-latest
     permissions:
       packages: write
       contents: read
-    strategy:
-      matrix:
-        version: ${{ fromJson('[''55_0_2'', ''56_0_0'']') }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        run: docker build . -t nexo-sdk -f src/${{ matrix.version }}/Dockerfile
+        run: docker build . -t nexo-sdk -f src/${{ inputs.tag }}/windows/Dockerfile
 
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Tag Docker image
-        run: docker tag nexo-sdk ghcr.io/${{ github.repository_owner }}/nexo-sdk:${{ matrix.version }}
+        run: docker tag nexo-sdk ghcr.io/${{ github.repository_owner }}/nexo-sdk:${{ inputs.tag }}-win
 
       - name: Push Docker image
-        run: docker push ghcr.io/${{ github.repository_owner }}/nexo-sdk:${{ matrix.version }}
+        run: docker push ghcr.io/${{ github.repository_owner }}/nexo-sdk:${{ inputs.tag }}-win
+  
+
+  build_and_push-linux:
+    runs-on: linux-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build . -t nexo-sdk -f src/${{ inputs.tag }}/linux/Dockerfile
+
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Tag Docker image
+        run: docker tag nexo-sdk ghcr.io/${{ github.repository_owner }}/nexo-sdk:${{ inputs.tag }}-linux
+
+      - name: Push Docker image
+        run: docker push ghcr.io/${{ github.repository_owner }}/nexo-sdk:${{ inputs.tag }}-linux
