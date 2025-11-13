@@ -1,8 +1,8 @@
+# Builder oparty na Linuksie: pobiera i rozpakowuje pakiet nexoSDK
+FROM ubuntu:24.04 AS builder
 # Definicja wersji SDK, którą chcemy pobrać
 ARG NEXO_VERSION="57_0_2"
 
-# Builder oparty na Linuksie: pobiera i rozpakowuje pakiet nexoSDK
-FROM ubuntu:24.04 AS builder
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Zainstaluj narzędzia do pobierania i rozpakowywania
@@ -11,6 +11,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp
+
+RUN echo "https://ftp.insert.com.pl/pub/aktualizacje/InsERT_nexo/nexoSDK_${NEXO_VERSION}.exe" > text1.txt
 
 # Pobranie InsERT nexoSDK (plik .exe self-extracting) i zapis jako sdk.exe
 RUN curl -fSL "https://ftp.insert.com.pl/pub/aktualizacje/InsERT_nexo/nexoSDK_${NEXO_VERSION}.exe" -o sdk.exe

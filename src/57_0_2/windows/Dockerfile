@@ -1,7 +1,7 @@
+FROM mcr.microsoft.com/windows/servercore:ltsc2022 AS builder
 # Definicja wersji SDK, którą chcemy pobrać
 ARG NEXO_VERSION="57_0_2"
 
-FROM mcr.microsoft.com/windows/servercore:ltsc2022 AS builder
 SHELL ["powershell", "-Command"]
 
 # Instalacja 7-Zip do rozpakowywania archiwum SDK
