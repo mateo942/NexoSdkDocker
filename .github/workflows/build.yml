@@ -1,9 +1,6 @@
 name: Build nexo SDK
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       tag:
@@ -14,6 +11,7 @@ on:
 jobs:
   build_and_push-windows:
     runs-on: windows-latest
+    if: ${{ inputs.tag }} 
     permissions:
       packages: write
       contents: read
@@ -37,6 +35,7 @@ jobs:
 
   build_and_push-linux:
     runs-on: linux-latest
+    if: ${{ inputs.tag }} 
     permissions:
       packages: write
       contents: read
